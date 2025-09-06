@@ -6,16 +6,14 @@ let marqueeX = 0;
 let marqueeSpeed = 2;
 let canvas;
 
-// Key handling for continuous backspace
 let backspacePressed = false;
 let lastBackspaceTime = 0;
-let backspaceDelay = 100; // milliseconds between deletions when held
+let backspaceDelay = 100; 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   noCursor();
-  // Make the canvas focusable
   canvas = document.querySelector("#defaultCanvas0");
   if (canvas) {
     canvas.tabIndex = 1;
@@ -25,7 +23,6 @@ function setup() {
 }
 
 function mousePressed() {
-  // Focus the canvas when clicked
   if (canvas) {
     canvas.focus();
   }
@@ -57,7 +54,6 @@ function draw() {
     }
   }
 
-  // Only draw text if there is any
   if (marqueeText.length > 0) {
     textSize(100);
     fill(255);
@@ -126,6 +122,5 @@ function keyTyped() {
   ) {
     marqueeText += key;
     console.log("Added character, text now:", marqueeText);
-    return false; // Prevent default behavior
-  }
+    return false;
 }
