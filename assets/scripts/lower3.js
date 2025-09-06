@@ -1,9 +1,7 @@
 p5.disableFriendlyErrors = true;
 
 let bannerHeight = 100;
-let marqueeText = "CCNYC 2nd Anniversary Party";
-let marqueeX = 0;
-let marqueeSpeed = 2;
+let txt = "CCNYC";
 let canvas;
 
 let backspacePressed = false;
@@ -40,40 +38,33 @@ function draw() {
   // pop();
 
   blendMode(DIFFERENCE);
+
+  // Calculate text width for line length
+  textSize(100);
+  let textW = txt.length > 0 ? textWidth(txt) : 0;
+  let lineWidth = textW;
+
   for (let i = 0; i < bannerHeight; i++) {
     let alpha = map(i, 0, bannerHeight - 1, 0, 255);
     stroke(255, alpha);
     noFill();
-    line(0, height - i, width, height - i);
+    line(0, height - i, lineWidth, height - i);
   }
 
   if (backspacePressed && millis() - lastBackspaceTime > backspaceDelay) {
-    if (marqueeText.length > 0) {
-      marqueeText = marqueeText.slice(0, -1);
+    if (txt.length > 0) {
+      txt = txt.slice(0, -1);
       lastBackspaceTime = millis();
     }
   }
 
-  if (marqueeText.length > 0) {
-    textSize(100);
+  if (txt.length > 0) {
+    textSize(90);
+    textAlign(LEFT, BASELINE);
     fill(255);
     noStroke();
 
-    let textW = textWidth(marqueeText);
-    let spacing = 50;
-
-    let totalWidth = textW + spacing;
-    let numCopies = Math.ceil((width + totalWidth) / totalWidth) + 1;
-
-    for (let i = 0; i < numCopies; i++) {
-      text(marqueeText, marqueeX + i * totalWidth, height - 20);
-    }
-
-    marqueeX -= marqueeSpeed;
-
-    if (marqueeX <= -totalWidth) {
-      marqueeX = 0;
-    }
+    text(txt, 10, height - 20);
   }
 
   blendMode(BLEND);
@@ -88,8 +79,8 @@ function keyPressed() {
   if (keyCode === BACKSPACE || keyCode === DELETE || keyCode === 8) {
     console.log("Backspace detected");
     backspacePressed = true;
-    if (marqueeText.length > 0) {
-      marqueeText = marqueeText.slice(0, -1);
+    if (txt.length > 0) {
+      txt = txt.slice(0, -1);
       lastBackspaceTime = millis();
     }
     return false;
@@ -120,8 +111,8 @@ function keyTyped() {
     keyCode !== BACKSPACE &&
     keyCode !== 8
   ) {
-    marqueeText += key;
-    console.log("Added character, text now:", marqueeText);
+    txt += key;
+    console.log("Added character, text now:", txt);
     return false;
   }
 }

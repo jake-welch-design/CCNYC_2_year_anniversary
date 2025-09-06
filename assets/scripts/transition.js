@@ -28,9 +28,23 @@ let numBalls = 12;
 let ballOrbitRad = 400;
 let ballOrbitSpeed = 0.02;
 
+// Transition animation variables
+let transitionActive = false;
+let transitionStartTime = 0;
+let transitionDuration = 3000; // 4 seconds in milliseconds
+let baseZ = -200; // Base Z position for main elements
+
 async function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   noCursor();
+
+  // Make canvas focusable for keyboard events
+  let canvas = document.querySelector("#defaultCanvas0");
+  if (canvas) {
+    canvas.tabIndex = 1;
+    canvas.style.outline = "none";
+    canvas.focus();
+  }
 
   try {
     font = await loadFont("../fonts/Inter_28pt-ExtraBold.ttf");
@@ -39,7 +53,7 @@ async function setup() {
   }
   textFont(font);
   pixelDensity(1);
-  ortho();
+  // ortho();
   frameRate(fps);
   preloadTextModels();
   initializeBalls();
@@ -125,6 +139,23 @@ function draw() {
   let direction = createVector(0, 0, -1);
   spotLight(c, position, direction, PI, 1);
 
+  // Calculate transition progress
+  let transitionZ = baseZ;
+  if (transitionActive) {
+    let elapsed = millis() - transitionStartTime;
+    let progress = elapsed / transitionDuration;
+
+    if (progress >= 1) {
+      // Animation complete
+      transitionActive = false;
+      transitionZ = baseZ;
+    } else {
+      // Create smooth in-out motion using sine wave
+      let lerpFactor = sin(progress * PI); // Goes 0 -> 1 -> 0 over the duration
+      transitionZ = lerp(baseZ, 700, lerpFactor); // Move from -500 to 50 and back (much closer to camera)
+    }
+  }
+
   let circleRadius = map(sin(frameCount * 0.01), -1, 1, 250, 350);
 
   if (autoRotate) {
@@ -139,7 +170,7 @@ function draw() {
   }
 
   push();
-  translate(0, 0, -500);
+  translate(0, 0, transitionZ);
 
   rotateX(circleRotationX);
   rotateY(circleRotationY);
@@ -197,7 +228,7 @@ function draw() {
   pop();
 
   push();
-  translate(0, 0, -500);
+  translate(0, 0, transitionZ);
   for (let i = 0; i < balls.length; i++) {
     let ball = balls[i];
 
@@ -229,7 +260,7 @@ function draw() {
   pop();
 
   push();
-  translate(0, 0, 800);
+  translate(0, 0, 500);
   fill(0, 50);
   noStroke();
   rectMode(CENTER);
@@ -240,4 +271,22 @@ function draw() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   background(bg);
+}
+
+function keyPressed() {
+  console.log("Key pressed:", key, keyCode);
+  if (key === "t" || key === "T") {
+    console.log("T key detected - starting transition");
+    // Start transition animation
+    transitionActive = true;
+    transitionStartTime = millis();
+  }
+}
+
+function mousePressed() {
+  // Focus canvas when clicked
+  let canvas = document.querySelector("#defaultCanvas0");
+  if (canvas) {
+    canvas.focus();
+  }
 }
