@@ -16,7 +16,7 @@ const ARENA_API_URLS = [
 let transitionActive = false;
 let transitionStartTime = 0;
 let transitionDuration = 4000; // 4 seconds
-let baseChunkSize = 10;
+let baseChunkSize = 30;
 
 // Grid reveal system
 let gridRevealMap = [];
