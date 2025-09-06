@@ -8,7 +8,7 @@ let canvas;
 
 let backspacePressed = false;
 let lastBackspaceTime = 0;
-let backspaceDelay = 100; 
+let backspaceDelay = 100;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -123,4 +123,5 @@ function keyTyped() {
     marqueeText += key;
     console.log("Added character, text now:", marqueeText);
     return false;
+  }
 }

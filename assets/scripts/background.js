@@ -10,10 +10,9 @@ for (let i = 0; i < 28; i++) {
 }
 let txtSize = 15;
 
-// Text scaling variables
-let minTextSize = 15; // Minimum text size at the center
-let maxTextSize = 45; // Maximum text size at the outer edge
-let textScaleRadius = 500; // Radius at which text reaches max size
+let minTextSize = 15;
+let maxTextSize = 45;
+let textScaleRadius = 500;
 
 let spiralRadius = 0;
 let spiralAngle = 0;
@@ -80,7 +79,6 @@ function initializeLetterColors() {
   letterColors = [];
 
   for (let i = 0; i < textContent.length; i++) {
-    // Assign each letter a random color from the palette
     let randomColorIndex = Math.floor(Math.random() * colorPalette.length);
     letterColors[i] = colorPalette[randomColorIndex];
   }
@@ -92,7 +90,6 @@ function draw() {
     flippedCanvas.textFont(customFont);
   }
 
-  // Update all letter colors every 5 frames
   if (frameCount - lastColorUpdate >= colorChangeFrames) {
     initializeLetterColors();
     lastColorUpdate = frameCount;
@@ -179,7 +176,6 @@ function drawSpiralToCanvas(
     let x = centerX + cos(currentAngle) * currentRadius;
     let y = centerY + sin(currentAngle) * currentRadius;
 
-    // Simply use the pre-assigned color for this letter
     let selectedColor = letterColors[i];
 
     let waveOffset = sin(frameCount * waveSpeed + i) * waveAmt;
